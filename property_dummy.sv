@@ -1,65 +1,174 @@
+	parameter ADDR_WIDTH = 16;
+    parameter DATA_WIDTH = 32;
+    parameter GRANULE = 8;
+    parameter REGISTER_NUM = 16;                                                                                                  
+	localparam SEL_WIDTH = DATA_WIDTH / GRANULE;
 
-module mem_property
-	#(
-	parameter ADDR_WIDTH = 8,
-	parameter DATA_WIDTH = 32
-	)
-	(
-	input logic clk,
-	input logic reset,
+module wb_slave (
+    input wire rst_i,
+    input wire clk_i,
+    input wire [ADDR_WIDTH-1:0] adr_i,
+    input wire [DATA_WIDTH-1:0] dat_i,
+    input reg [DATA_WIDTH-1:0] dat_o,
+    input wire we_i,
+    input wire stb_i,
+    input wire ack_o,
+    input wire err_o,
+    input wire stall_o,
+    input wire cyc_i
+);
 
-	//control signals
-	input logic [ADDR_WIDTH-1:0]  addr,
-	input logic                   wr_en,
-	input logic                   rd_en,
-	
-	//data signals
-	input logic [DATA_WIDTH-1:0] wdata,
-	input logic [DATA_WIDTH-1:0] rdata
-	);
+        /*--------------------------------------------------
+        CHECK # 1. ack_o and err_o cannot be high at the same time 
+          --------------------------------------------------*/
+`ifdef check1
+	property ack_o_and_err_o_not_high_at_same_time ;
+  		@(posedge clk)disable iff(rst_i)
+			(ack_o==1)|-> (err_o!=1);
+	endproperty
+        
+	assert property (ack_o_and_err_o_not_high_at_same_time) 
+  		$display($stime,,,"ack_o and err_o cannot be high at the same time check PASSED\n");
+  	else 
+    	$display($stime,,,"ack_o and err_o cannot be high at the same time check FAILED\n");
+`endif
+        /*--------------------------------------------------
+        CHECK # 2. Slave should responde to stb_i with ack_o assertion test
+						assuming no error
+          --------------------------------------------------*/
+`ifdef check2
+	property ack_o_response_to_stb_i_signal;
+   		@(posedge clk)disable iff(rst_i || err_o)
+			$rose(stb_i)|=> $rose(ack_o==1);
+	endproperty
+       
+	assert property ( ack_o_response_to_stb_i_signal) 
+  		$display($stime,,,"ack_o Response to stb_i signal CHECK PASSED\n");
+  	else 
+    	$display($stime,,,"ack_o Response to stb_i signal CHECK FAILED\n");
+`endif
+        /*--------------------------------------------------
+        CHECK # 3. Reset signal assertion test
+          --------------------------------------------------*/
+`ifdef check3
+	property reset_signal_check;
+   		@(posedge clk)
+			$rose(rst_i) |-> Ack_o==0 && err_o==0 && stall_o==0;
+	endproperty
+        
+	assert property ( reset_signal_check) 
+  		$display($stime,,,"Reset assertion CHECK PASSED\n");
+  	else 
+    	$display($stime,,,"Reset assertion CHECK FAILED\n");
+`endif
+        /*--------------------------------------------------
+        CHECK # 4. Stall signal assertion test for write operation
+          --------------------------------------------------*/
+`ifdef check4
+	property Stall_signal_check1;
+   		@(posedge clk)disable iff(rst_i || !we_i)			//$stable cannot be used because it checks the signal for 2 cycles
+			$rose(stall_o) |->  (Stb_i==1) && (we_i==1)		
+	endproperty
+        
+	assert property ( Stall_signal_check) 
+  		$display($stime,,,"Stall signal CHECK4 PASSED\n");
+  	else 
+    	$display($stime,,,"Stall signal CHECK4 FAILED\n");
+`endif
+        /*--------------------------------------------------
+        CHECK # 5. Stall signal assertion testfor read operation
+          --------------------------------------------------*/
 
-	`ifdef check1
-		property check_write_op;
-			@(posedge clk) disable iff(reset) $rose(wr_en) |-> !($isunknown(addr) && $isunknown(wdata));
-		endproperty
+`ifdef check5
+	property Stall_signal_check2;
+   		@(posedge clk)disable iff(rst_i || we_i)			//$stable cannot be used because it checks the signal for 2 cycles
+			$rose(stall_o) |->  (Stb_i==1) && (we_i==0)		
+	endproperty
+        
+	assert property ( Stall_signal_check2) 
+  		$display($stime,,,"Stall signal CHECK5 PASSED\n");
+  	else 
+    	$display($stime,,,"Stall signal CHECK5 FAILED\n");
+`endif
+ 	/*-----------------------------------------------------
+    CHECK # 6. Check if stb_i signal is valid driven while cyc_i is high.
+  		--------------------------------------------------*/
 
-		assert property (check_write_op) 
-				$display($stime,"\t\t PASS::check write operation\n");
-			else 
-				$display($stime,"\t\t FAIL::check write operation\n");
-	`endif
+`ifdef check6
+	property stb_i_signal_validity;
+   		@(posedge clk)disable iff(rst_i )			
+			(cyc_i==1) |->  ^(stb_i)==='bx && ^(stb_i)==='bz;
+	endproperty
+        
+	assert property ( stb_i_signal_validity) 
+  		$display($stime,,,"stb_i signal valid driven CHECK PASSED\n");
+  	else 
+    	$display($stime,,,"stb_i signal valid driven CHECK FAILED\n");
+`endif
 
-	`ifdef check2
-		property check_read_op;
-			@(posedge clk) disable iff(reset) $rose(rd_en) |-> !($isunknown(addr)) ##1 !($isunknown(rdata));
-		endproperty
+ 	/*-----------------------------------------------------
+    CHECK # 7. Check if stall signal is valid driven while cyc_i is high.
+  		--------------------------------------------------*/
 
-		assert property (check_read_op) 
-				$display($stime,"\t\t PASS::check read operation\n");
-			else 
-				$display($stime,"\t\t FAIL::check read operation\n");
-	`endif
+`ifdef check7
+	property stall_o_signal_validity;
+   		@(posedge clk)disable iff(rst_i )			
+			(cyc_i==1) |->  ^(stall_o)==='bx && ^(stall_o)==='bz;
+	endproperty
+        
+	assert property ( stall_o_signal_validity) 
+  		$display($stime,,,"stall signal valid driven CHECK PASSED\n");
+  	else 
+    	$display($stime,,,"stall signal valid driven CHECK FAILED\n");
+`endif
 
-	`ifdef check3
-		property check_rd_en;
-			@(posedge clk) disable iff(reset) rd_en |-> !wr_en;
-		endproperty
+/*-----------------------------------------------------
+    CHECK # 8. Check if ack signal is valid driven while cyc_i is high.
+  		--------------------------------------------------*/
 
-		assert property (check_rd_en) 
-				$display($stime,"\t\t PASS::check on enables\n");
-			else 
-				$display($stime,"\t\t FAIL::check on enables\n");
-	`endif
+`ifdef check8
+	property ack_o_signal_validity;
+   		@(posedge clk)disable iff(rst_i )			
+			(cyc_i==1) |->  ^(ack_o)==='bx && ^(ack_o)==='bz;
+	endproperty
+        
+	assert property ( ack_o_signal_validity) 
+  		$display($stime,,,"ack signal valid driven CHECK PASSED\n");
+  	else 
+    	$display($stime,,,"ack signal valid driven CHECK FAILED\n");
+`endif
 
-	`ifdef check4
-		property check_wr_en;
-			@(posedge clk) disable iff(reset) wr_en |-> !rd_en;
-		endproperty
 
-		assert property (check_wr_en) 
-				$display($stime,"\t\t PASS::check on enables\n");
-			else 
-				$display($stime,"\t\t FAIL::check on enables\n");
-	`endif
+/*-----------------------------------------------------
+    CHECK # 9. Check if err signal is valid driven while cyc_i is high.
+  		--------------------------------------------------*/
 
+`ifdef check9
+	property err_o_signal_validity;
+   		@(posedge clk)disable iff(rst_i )			
+			(cyc_i==1) |->  ^(err_o)==='bx && ^(err_o)==='bz;
+	endproperty
+        
+	assert property ( err_o_signal_validity) 
+  		$display($stime,,,"err signal valid driven CHECK PASSED\n");
+  	else 
+    	$display($stime,,,"err signal valid driven CHECK FAILED\n");
+`endif
+
+
+/*-----------------------------------------------------
+    CHECK # 10. Check if WE_i signal is valid driven while cyc_i is high.
+  		--------------------------------------------------*/
+
+`ifdef check10
+	property we_i_signal_validity;
+   		@(posedge clk)disable iff(rst_i )			
+			(cyc_i==1) |->  ^(we_i)==='bx && ^(we_i)==='bz;
+	endproperty
+        
+	assert property ( we_i_signal_validity) 
+  		$display($stime,,,"we_i signal valid driven CHECK PASSED\n");
+  	else 
+    	$display($stime,,,"we_i signal valid driven CHECK FAILED\n");
+`endif
 endmodule
