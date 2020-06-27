@@ -61,40 +61,12 @@ module wb_slave (
   	else 
     	$display($stime,,,"Reset assertion CHECK FAILED\n");
 `endif
-        /*--------------------------------------------------
-        CHECK # 4. Stall signal assertion test for write operation
-          --------------------------------------------------*/
-`ifdef check4
-	property Stall_signal_check1;
-   		@(posedge clk)disable iff(rst_i || !we_i)			//$stable cannot be used because it checks the signal for 2 cycles
-			$rose(stall_o) |->  (Stb_i==1) && (we_i==1)		
-	endproperty
-        
-	assert property ( Stall_signal_check) 
-  		$display($stime,,,"Stall signal CHECK4 PASSED\n");
-  	else 
-    	$display($stime,,,"Stall signal CHECK4 FAILED\n");
-`endif
-        /*--------------------------------------------------
-        CHECK # 5. Stall signal assertion testfor read operation
-        --------------------------------------------------*/
-
-`ifdef check5
-	property Stall_signal_check2;
-   		@(posedge clk)disable iff(rst_i || we_i)			//$stable cannot be used because it checks the signal for 2 cycles
-			$rose(stall_o) |->  (Stb_i==1) && (we_i==0)		
-	endproperty
-        
-	assert property ( Stall_signal_check2) 
-  		$display($stime,,,"Stall signal CHECK5 PASSED\n");
-  	else 
-    	$display($stime,,,"Stall signal CHECK5 FAILED\n");
-`endif
+ 
  /*-----------------------------------------------------
-    CHECK # 6. Check if stb_i signal is valid driven while cyc_i is high.
+    CHECK # 4. Check if stb_i signal is valid driven while cyc_i is high.
   --------------------------------------------------*/
 
-`ifdef check6
+`ifdef check4
 	property stb_i_signal_validity;
    		@(posedge clk)disable iff(rst_i )			
 			(cyc_i==1) |->  ^(stb_i)==='bx && ^(stb_i)==='bz;
@@ -107,10 +79,10 @@ module wb_slave (
 `endif
 
  /*-----------------------------------------------------
-    CHECK # 7. Check if stall signal is valid driven while cyc_i is high.
+    CHECK # 5. Check if stall signal is valid driven while cyc_i is high.
   --------------------------------------------------*/
 
-`ifdef check7
+`ifdef check5
 	property stall_o_signal_validity;
    		@(posedge clk)disable iff(rst_i )			
 			(cyc_i==1) |->  ^(stall_o)==='bx && ^(stall_o)==='bz;
@@ -123,10 +95,10 @@ module wb_slave (
 `endif
 
 /*-----------------------------------------------------
-    CHECK # 8. Check if ack signal is valid driven while cyc_i is high.
+    CHECK # 6. Check if ack signal is valid driven while cyc_i is high.
   --------------------------------------------------*/
 
-`ifdef check8
+`ifdef check6
 	property ack_o_signal_validity;
    		@(posedge clk)disable iff(rst_i )			
 			(cyc_i==1) |->  ^(ack_o)==='bx && ^(ack_o)==='bz;
@@ -139,10 +111,10 @@ module wb_slave (
 `endif
 
 /*-----------------------------------------------------
-    CHECK # 9. Check if err signal is valid driven while cyc_i is high.
+    CHECK # 7. Check if err signal is valid driven while cyc_i is high.
   --------------------------------------------------*/
 
-`ifdef check9
+`ifdef check7
 	property err_o_signal_validity;
    		@(posedge clk)disable iff(rst_i )			
 			(cyc_i==1) |->  ^(err_o)==='bx && ^(err_o)==='bz;
@@ -155,10 +127,10 @@ module wb_slave (
 `endif
 
 /*-----------------------------------------------------
-    CHECK # 10. Check if WE_i signal is valid driven while cyc_i is high.
+    CHECK # 8. Check if WE_i signal is valid driven while cyc_i is high.
   --------------------------------------------------*/
 
-`ifdef check10
+`ifdef check8
 	property we_i_signal_validity;
    		@(posedge clk)disable iff(rst_i )			
 			(cyc_i==1) |->  ^(we_i)==='bx && ^(we_i)==='bz;
