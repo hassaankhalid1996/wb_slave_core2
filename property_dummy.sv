@@ -77,7 +77,7 @@ module wb_slave (
 `endif
         /*--------------------------------------------------
         CHECK # 5. Stall signal assertion testfor read operation
-          --------------------------------------------------*/
+        --------------------------------------------------*/
 
 `ifdef check5
 	property Stall_signal_check2;
@@ -90,9 +90,9 @@ module wb_slave (
   	else 
     	$display($stime,,,"Stall signal CHECK5 FAILED\n");
 `endif
- 	/*-----------------------------------------------------
+ /*-----------------------------------------------------
     CHECK # 6. Check if stb_i signal is valid driven while cyc_i is high.
-  		--------------------------------------------------*/
+  --------------------------------------------------*/
 
 `ifdef check6
 	property stb_i_signal_validity;
@@ -106,9 +106,9 @@ module wb_slave (
     	$display($stime,,,"stb_i signal valid driven CHECK FAILED\n");
 `endif
 
- 	/*-----------------------------------------------------
+ /*-----------------------------------------------------
     CHECK # 7. Check if stall signal is valid driven while cyc_i is high.
-  		--------------------------------------------------*/
+  --------------------------------------------------*/
 
 `ifdef check7
 	property stall_o_signal_validity;
@@ -124,7 +124,7 @@ module wb_slave (
 
 /*-----------------------------------------------------
     CHECK # 8. Check if ack signal is valid driven while cyc_i is high.
-  		--------------------------------------------------*/
+  --------------------------------------------------*/
 
 `ifdef check8
 	property ack_o_signal_validity;
@@ -138,10 +138,9 @@ module wb_slave (
     	$display($stime,,,"ack signal valid driven CHECK FAILED\n");
 `endif
 
-
 /*-----------------------------------------------------
     CHECK # 9. Check if err signal is valid driven while cyc_i is high.
-  		--------------------------------------------------*/
+  --------------------------------------------------*/
 
 `ifdef check9
 	property err_o_signal_validity;
@@ -155,10 +154,9 @@ module wb_slave (
     	$display($stime,,,"err signal valid driven CHECK FAILED\n");
 `endif
 
-
 /*-----------------------------------------------------
     CHECK # 10. Check if WE_i signal is valid driven while cyc_i is high.
-  		--------------------------------------------------*/
+  --------------------------------------------------*/
 
 `ifdef check10
 	property we_i_signal_validity;
