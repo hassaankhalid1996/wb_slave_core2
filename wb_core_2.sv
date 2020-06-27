@@ -66,9 +66,9 @@ module wb_slave (
 			for (i = 0; i < REGISTER_NUM; i++) begin
 				register_value[i] <= {DATA_WIDTH{1'h0}};
 			end
+		end
 
-		end else begin
-
+		else begin
 			case (state)
 
 				STATE_IDLE: begin
