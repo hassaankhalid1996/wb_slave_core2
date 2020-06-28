@@ -1,7 +1,7 @@
 
-`include "environment_0034.sv"
+`include "wb_core_2_environment.sv"
 
-program test(intf i_intf);
+program wb_test(intf i_intf);
 	environment env;
 
 	initial begin
