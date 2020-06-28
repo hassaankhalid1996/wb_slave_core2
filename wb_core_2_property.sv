@@ -4,7 +4,7 @@
     parameter REGISTER_NUM = 16;                                                                                                  
 	localparam SEL_WIDTH = DATA_WIDTH / GRANULE;
 
-module wb_slave (
+module wb_property (
     input wire rst_i,
     input wire clk_i,
     input wire [ADDR_WIDTH-1:0] adr_i,
