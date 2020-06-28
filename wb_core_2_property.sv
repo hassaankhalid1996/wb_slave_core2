@@ -68,7 +68,7 @@ module wb_property (
 
 `ifdef check4
 	property stb_i_signal_validity;
-   		@(posedge clk)disable iff(rst_i )			
+   		@(posedge clk)			
 			(cyc_i==1) |->  ^(stb_i)==='bx && ^(stb_i)==='bz;
 	endproperty
         
@@ -84,7 +84,7 @@ module wb_property (
 
 `ifdef check5
 	property stall_o_signal_validity;
-   		@(posedge clk)disable iff(rst_i )			
+   		@(posedge clk)			
 			(cyc_i==1) |->  ^(stall_o)==='bx && ^(stall_o)==='bz;
 	endproperty
         
@@ -100,7 +100,7 @@ module wb_property (
 
 `ifdef check6
 	property ack_o_signal_validity;
-   		@(posedge clk)disable iff(rst_i )			
+   		@(posedge clk)			
 			(cyc_i==1) |->  ^(ack_o)==='bx && ^(ack_o)==='bz;
 	endproperty
         
@@ -116,7 +116,7 @@ module wb_property (
 
 `ifdef check7
 	property err_o_signal_validity;
-   		@(posedge clk)disable iff(rst_i )			
+   		@(posedge clk)			
 			(cyc_i==1) |->  ^(err_o)==='bx && ^(err_o)==='bz;
 	endproperty
         
@@ -132,7 +132,7 @@ module wb_property (
 
 `ifdef check8
 	property we_i_signal_validity;
-   		@(posedge clk)disable iff(rst_i )			
+   		@(posedge clk)			
 			(cyc_i==1) |->  ^(we_i)==='bx && ^(we_i)==='bz;
 	endproperty
         
