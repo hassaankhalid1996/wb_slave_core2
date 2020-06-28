@@ -28,7 +28,9 @@ class driver;
 	endtask
     
 	
-	task SS_pipelined;                     //single cycle pipelined task
+	task SC_pipelined;                     //single cycle pipelined task
+		transaction trans;
+		gen2driv.get(trans);
 		`driver.adr_i  <= trans.address;
 		`driver.sel_i  <= trans.select_bank;
 		`driver.wr_i   <= trans.write_enable;
