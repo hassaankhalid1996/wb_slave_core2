@@ -13,7 +13,7 @@ class scoreboard;
 		if(trans.wdata == trans.rdata)
 			$display("Result is as Expected");
 		else begin
-			no_of_errors = no_of_errors + 1;
+			no_of_errors = no_of_errors + 1;     
 			$error("Wrong Result.\n\tExpeced: %0d Actual: %0d", trans.wdata, trans.rdata);
 		end
 	endtask
