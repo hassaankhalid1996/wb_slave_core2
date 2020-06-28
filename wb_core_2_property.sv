@@ -141,4 +141,36 @@ module wb_property (
   	else 
     	$display($stime,,,"we_i signal valid driven CHECK FAILED\n");
 `endif
+		
+/*-----------------------------------------------------
+    CHECK # 9. Check if adr_i is valid while cyc_i is high.
+  --------------------------------------------------*/
+
+`ifdef check9
+	property adr_i_signal_validity;
+   		@(posedge clk)		
+			(cyc_i==1) |->  ^(adr_i)==='bx && ^(adr_i)==='bz;
+	endproperty
+        
+	assert property ( adr_i_signal_validity) 
+  		$display($stime,,,"adr_i signal valid driven CHECK PASSED\n");
+  	else 
+    	$display($stime,,,"adr_i signal valid driven CHECK FAILED\n");
+`endif
+
+/*-----------------------------------------------------
+    CHECK # 10. Check if dat_i is valid while cyc_i is high.
+  --------------------------------------------------*/
+
+`ifdef check10
+	property dat_i_signal_validity;
+   		@(posedge clk)		
+			(cyc_i==1) |->  ^(dat_i)==='bx && ^(dat_i)==='bz;
+	endproperty
+        
+	assert property ( dat_i_signal_validity) 
+  		$display($stime,,,"dat_i signal valid driven CHECK PASSED\n");
+  	else 
+    	$display($stime,,,"dat_i signal valid driven CHECK FAILED\n");
+`endif
 endmodule
