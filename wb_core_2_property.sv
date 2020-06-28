@@ -1,7 +1,7 @@
 	parameter ADDR_WIDTH = 16;
-    parameter DATA_WIDTH = 32;
-    parameter GRANULE = 8;
-    parameter REGISTER_NUM = 16;                                                                                                  
+	parameter DATA_WIDTH = 32;
+	parameter GRANULE = 8;
+	parameter REGISTER_NUM = 16;
 	localparam SEL_WIDTH = DATA_WIDTH / GRANULE;
 
 module wb_property (
