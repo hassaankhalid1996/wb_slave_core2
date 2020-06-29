@@ -35,7 +35,7 @@ module top;
 
 	wb_slave slave(
 		.clk_i(i_intf.clk_i),
-		.rst_i(i_intf.rst_it),
+		.rst_i(i_intf.rst_i),
 		.adr_i(i_intf.adr_i),
 		.dat_i(i_intf.dat_i),
 		.dat_o(i_intf.dat_o),
@@ -49,7 +49,7 @@ module top;
 
 	wb_property slave_property(
 		.clk_i(i_intf.clk_i),
-		.rst_i(i_intf.rst_it),
+		.rst_i(i_intf.rst_i),
 		.adr_i(i_intf.adr_i),
 		.dat_i(i_intf.dat_i),
 		.dat_o(i_intf.dat_o),
