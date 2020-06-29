@@ -12,7 +12,7 @@ class monitor;
 		transaction trans;
 		trans = new();
 	    @(posedge interf);
-			if(interf.wr_i && interf.stb_i)begin			/// write 
+		if(interf.we_i && interf.stb_i)begin			/// write 
 				@(posedge interf);
 				wait(interf.ack_o||err_o);
 				if (interf.ack_o) no_ack++;
@@ -20,9 +20,9 @@ class monitor;
 				trans.dat_in      <= interf.dat_i;     
 				trans.select_bank <= interf.sel_i;
 				trans.address     <= interf.adr_i;
-				trans.write_enable<= interf.wr_i;
+				trans.write_enable<= interf.we_i;
 				end
-			else if( !interf.wr_i && interf.stb_i)begin // read
+		else if( !interf.we_i && interf.stb_i)begin // read
 				@(posedge interf);
 				wait(interf.ack_o||err_o);
 				if (interf.ack_o) no_ack++;
@@ -30,7 +30,7 @@ class monitor;
 				trans.dat_out     <= interf.dat_o;     
 				trans.select_bank <= interf.sel_i;
 				trans.address     <= interf.adr_i;
-				trans.write_enable<= interf.wr_i;
+				trans.write_enable<= interf.we_i;
 				end
 		mon2scb.put(trans);
 		$display("[ Monitor Read ]");
