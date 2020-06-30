@@ -3,6 +3,8 @@ class generator;
 	mailbox gen2drv;
 	mailbox gen2scb; 
 	
+// function declaration
+	
 	function new (mailbox gen2drv , mailbox gen2scb);
 		this.gen2drv = gen2drv;
 		this.gen2scb = gen2scb; 
