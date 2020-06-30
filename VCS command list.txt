@@ -1,0 +1,6 @@
+
+vcs -sverilog wb_core2.sv top.sv +define+check1 -assert enable_diag \+define+ASSERT_ON -y -full64 -debug_all -cm line+tgl+fsm+cond+branch+assert
+
+./simv -gui -cm line+tgl+fsm+cond+branch+assert
+
+dve -covdir simv.vdb -full64
