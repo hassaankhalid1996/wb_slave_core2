@@ -1,8 +1,6 @@
 `define monitor interf.monitor 
 class monitor;
 	mailbox mon2scb;
-	int no_ack;
-	int no_err;
 	virtual wb_interface interf;      //interface                  
 	function new(virtual wb_interface interf,mailbox mon2scb);
 		this.interf = interf;
