@@ -8,6 +8,7 @@ class monitor;
 	endfunction
 
 	task main;
+		forever begin
 		transaction trans;
 		trans = new();
 	    @(posedge `monitor.clk_i);
@@ -34,6 +35,7 @@ class monitor;
                                 @(posedge `monitor.clk_i);
 		mon2scb.put(trans);
 		$display("[ Monitor Read ]");
+		end
 	endtask
 endclass
 
