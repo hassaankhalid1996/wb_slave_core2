@@ -43,7 +43,8 @@ class driver;
 		`driver.cyc_i  <= 1'b1;
 		if(trans.write_enable)
 			`driver.dat_i  <= trans.data_out; 
-
+		
+$display("Driver: Address:%d,select bank:%d,data_out= %d",trans.address,trans.select_bank, trans.data_out);
 
 		wait(`driver.ack_o == 1 || `driver.err_o == 1);   
 
@@ -78,6 +79,8 @@ class driver;
 		`driver.cyc_i  <= 1'b1;
 		if(trans.write_enable)
 			`driver.dat_i  <= trans.data_out; 
+		
+$display("Driver: Address:%d,select bank:%d,data_out= %d",trans.address,trans.select_bank, trans.data_out);		
 		
 		@(posedge interf.clk_i); 
 		`driver.stb_i <= 1'b0;
