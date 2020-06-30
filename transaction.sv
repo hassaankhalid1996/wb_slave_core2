@@ -19,8 +19,9 @@ class transaction;
 		this.select_bank = select_bank; 
 		this.write_enable = write_enable;
 		this.data_out = data_out;
-		$display("address = %d, data_out = %d, data_in = %d, select_bank = %d, bitwrite_enable = %d",
-		address, data_out, data_in, select_bank, write_enable);
 	endfunction
 	
+	function display ();
+		$display("address = %d, data_out = %d, data_in = %d, select_bank = %d, bitwrite_enable = %d",address, data_out, data_in, select_bank, write_enable);
+	endfunction
 endclass
