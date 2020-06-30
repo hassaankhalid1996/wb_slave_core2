@@ -1,6 +1,6 @@
 
 class scoreboard;
-	int no_of_errors;
+	//int no_of_errors;
 	mailbox mon2scb;
 	mailbox gen2scb;
     int transaction_count;	//transaction counter
@@ -13,27 +13,33 @@ class scoreboard;
     task collect;
 		repeat (transaction_count) begin
 			gen2scb.get(gtrans);
-			if(gtrans.we_i) 
-            mem[gtrans.adr_i] = gtrans.dat_i;
-			end
+			if(gtrans.write_enable) 
+            		mem[gtrans.address] = gtrans.data_in;
+	end
+	endtask
 			
 	task main;
 		repeat (transaction_count) begin
 		mon2scb.get(mtrans);
-			if(!mtrans.we_i) begin
-				if(mem[gtrans.adr_i] != mtrans.dat_i); 
-            $display("[SCB-FAIL] Addr = %0h,\n\t Data :: Expected = %0h Actual = %0h",gtrans.adr_i,mem[gtrans.adr_i],mtrans.dat_i);        
-        else 
-            $display("[SCB-PASS] Addr = %0h,\n \tData :: Expected = %0h Actual = %0h",gtrans.adr_i,mem[gtrans.adr_i],mtrans.dat_i);
-      end
+			if(!mtrans.write_enable) begin
+				if (mem[gtrans.address] != mtrans.data_in)
+            		$display("[SCB-FAIL]  Data :: Expected = %0h Actual = %0h",mem[gtrans.address],mtrans.data_in);        
+        		else 
+            		$display("[SCB-PASS] Data :: Expected = %0h Actual = %0h",mem[gtrans.address],mtrans.data_in);
+         end
+	end
 	endtask
+
     task run;
+        begin
 	fork 
-	collect;
-	main;'
-	join
-    end
+	collect();
+	main();
+	join 
+       end
+    endtask
 endclass
+
 
 
 
