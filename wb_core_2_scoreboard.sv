@@ -1,6 +1,5 @@
 
 class scoreboard;
-	//int no_of_errors;
 	mailbox mon2scb;
 	mailbox gen2scb;
     int transaction_count;	//transaction counter
@@ -12,6 +11,7 @@ class scoreboard;
 	endfunction
     task collect;
 		repeat (transaction_count) begin
+			gtrans=new();
 			gen2scb.get(gtrans);
 			if(gtrans.write_enable) 
             		mem[gtrans.address] = gtrans.data_in;
@@ -20,7 +20,8 @@ class scoreboard;
 			
 	task main;
 		repeat (transaction_count) begin
-		mon2scb.get(mtrans);
+			mtrans=new();
+			mon2scb.get(mtrans);
 			if(!mtrans.write_enable) begin
 				if (mem[gtrans.address] != mtrans.data_in)
             		$display("[SCB-FAIL]  Data :: Expected = %0h Actual = %0h",mem[gtrans.address],mtrans.data_in);        
