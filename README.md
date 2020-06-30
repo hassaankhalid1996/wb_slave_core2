@@ -1,4 +1,4 @@
 # wb_slave_core2
 Designing a layered test-bench for the wishbone slave interface.
 
-Driver, transaction, interface, scoreboard and properties classes have been uploaded. Please check for logical error. 
+Testbench is in running condition! No syntax errors. Logical errors need to be removed. Features and test cases need to be added. Also testbench is still not multi-threaded.
