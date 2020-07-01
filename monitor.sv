@@ -10,7 +10,7 @@ class monitor;
 	task main;
 		forever begin
 		transaction trans;
-		trans = new();
+			trans = new(0,0,0,15,0);
 	   		 @(posedge interf.clk_i);
 ////////////////////////////////////////// write////////////////////////////////////////
 			if(`monitor.we_i && `monitor.stb_i && `monitor.cyc_i)begin			
