@@ -30,17 +30,136 @@ class environment;
 	endfunction
 
 	task run();
-//		fork
-			drv.reset();
-			gen.write_specific_addr(4);
-			drv.SC_pipelined();
-			gen.read_specific_addr(4);
-			drv.SC_pipelined();
-			
-			mon.main();
-			scb.run();
+	
+		drv.reset();	//reset 
+		mon.main();		//starting monitor
+		
+		sc_pl_rw();		//SS_pipeline_R&W
+		
+		drv.reset();	//reset
+		
+		sc_st_rw();		//SS_standard_R&W
+		
+		drv.reset();	//reset
+		
+		bl_pl_rw();		//BL_pipeline_R&W
+		
+		drv.reset();	//reset
+		
+		bl_st_rw();		//BL_standard_R&W
+		
+		drv.reset();	//reset
+		
+		$finish; 		//finish
 
-			$finish;
-//		join
 	endtask
+	
+/* Description:
+This task is for single cycle standard read & write operation
+*/
+
+	task sc_st_rw();
+		
+		gen.write_read_random_addr();
+		gen.write_read_random_addr();
+		gen.write_read_random_addr();
+	
+	//The above tasks makes 6 transactions so we need to
+	//call the below mentioned function twice for writing & then 
+	//reading 
+	
+		for (int i = 0 ; i < 6 ; i++)
+		drv.sc_st_rw();
+		
+	endtask 
+	
+/* Description:
+This task is for block standard read & write operation
+*/
+
+	task bl_st_rw; 
+	
+	// This sets the block to 16
+	
+		drv.transaction_count = 16; 
+		gen.full_block_write();
+		drv.bl_st_rw();
+		gen.full_block_read();
+		drv.bl_st_rw();
+
+	// This sets the block to 4
+	
+		drv.transaction_count = 4;
+		gen.partial_block_write(4);
+		drv.bl_st_rw();
+		gen.partial_block_read(4);
+		drv.bl_st_rw();
+		
+	// This sets the block to 11
+	
+		drv.transaction_count = 11;
+		gen.partial_block_write(11);
+		drv.bl_st_rw();
+		gen.partial_block_read(11);
+		drv.bl_st_rw();
+
+
+	endtask
+
+/* Description:
+This task is for single cycle pipeline read & write operation
+*/
+
+	task sc_pl_rw;
+	
+		gen.write_specific_addr(14);
+		gen.read_specific_addr(14);
+		gen.write_specific_addr(1);
+		gen.read_specific_addr(1);
+		gen.write_specific_addr(0);
+		gen.read_specific_addr(0);
+		gen.write_specific_addr(7);
+		gen.read_specific_addr(7);
+	
+	//The above tasks makes 8 transactions so we need to
+	//call the below mentioned function 8 times for writing & then 
+	//reading 
+	
+		for (int i = 0 ; i <  ; i++)
+		drv.sc_pl_rw();
+	
+	endtask
+
+/* Description:
+This task is for block pipeline read & write operation
+*/
+	
+	task bl_pl_rw;
+	
+	// This sets the block to 16
+	
+		drv.transaction_count = 16; 
+		gen.full_block_write();
+		drv.bl_st_rw();
+		gen.full_block_read();
+		drv.bl_st_rw();
+
+	// This sets the block to 2
+	
+		drv.transaction_count = 2;
+		gen.partial_block_write(2);
+		drv.bl_st_rw();
+		gen.partial_block_read(2);
+		drv.bl_st_rw();
+		
+	// This sets the block to 8
+	
+		drv.transaction_count = 8;
+		gen.partial_block_write(8);
+		drv.bl_st_rw();
+		gen.partial_block_read(8);
+		drv.bl_st_rw();
+		
+	endtask
+	
 endclass
