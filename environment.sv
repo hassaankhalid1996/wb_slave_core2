@@ -25,33 +25,33 @@ class environment;
 		this.gen = new(gen2drv,gen2scb);
 		this.drv = new(gen2drv,intf);
 		this.mon = new(mon2scb,intf);
-		this.scb = new(gen2scb,mon2scb);
+		this.scb = new(/*gen2scb,*/mon2scb);
 	
 	endfunction
 
 	task run();
 	
+		fork
+			run_all();
+			mon.main();		//starting monitor
+			scb.run();
+		join 
+	
+	endtask 
+	
+	
+	task run_all();
+	
 		drv.reset();	//reset 
-		mon.main();		//starting monitor
-		
 		sc_pl_rw();		//SS_pipeline_R&W
-		
 		drv.reset();	//reset
-		
 		sc_st_rw();		//SS_standard_R&W
-		
 		drv.reset();	//reset
-		
 		bl_pl_rw();		//BL_pipeline_R&W
-		
+		drv.reset();	//reset
+		bl_st_rw();		//BL_standard_R&W		
 		drv.reset();	//reset
 		
-		bl_st_rw();		//BL_standard_R&W
-		
-		drv.reset();	//reset
-		
-		$finish; 		//finish
-
 	endtask
 	
 /* Description:
@@ -125,7 +125,7 @@ This task is for single cycle pipeline read & write operation
 	//call the below mentioned function 8 times for writing & then 
 	//reading 
 	
-		for (int i = 0 ; i < 8 ; i++)
+		for (int i = 0 ; i <  ; i++)
 		drv.sc_pl_rw();
 	
 	endtask
