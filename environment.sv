@@ -125,7 +125,7 @@ This task is for single cycle pipeline read & write operation
 	//call the below mentioned function 8 times for writing & then 
 	//reading 
 	
-		for (int i = 0 ; i <  ; i++)
+		for (int i = 0 ; i < 8 ; i++)
 		drv.sc_pl_rw();
 	
 	endtask
