@@ -18,7 +18,7 @@ The data written would be equal to address provided
 */
 
 		transaction tr; 
-		tr = new (address, 0 , address , 4'b1111, 1'b1);
+		tr = new (address, address , 0 , 4'b1111, 1'b1);
 		gen2drv.put(tr);
 		gen2scb.put(tr);
 		
@@ -46,7 +46,7 @@ In this case the data written would also be equal to address provided.
 	for (int i = 0 ; i < 16 ; i++)
 	begin 
 		transaction tr; 
-		tr = new (i, 0 , i, 4'b1111, 1'b1);
+		tr = new (i, i , 0, 4'b1111, 1'b1);
 		gen2drv.put(tr);
 		gen2scb.put(tr);
 	end 	
@@ -77,7 +77,7 @@ In this case the data written would also be equal to address provided.
 	for (int i = 0 ; i < value_less_than_16 ; i++)
 	begin 
 		transaction tr; 
-		tr = new (i, 0 , i, 4'b1111, 1'b1);
+		tr = new (i, i , 0, 4'b1111, 1'b1);
 		gen2drv.put(tr);
 		gen2scb.put(tr);
 	end 	
