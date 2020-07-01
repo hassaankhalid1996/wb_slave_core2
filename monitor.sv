@@ -10,40 +10,34 @@ class monitor;
 	task main;
 		forever begin
 		transaction trans;
-		trans = new(0,0,0,15,0);
-	    @(posedge `monitor.clk_i);
-			if(interf.we_i && interf.stb_i&& interf.cyc_i)begin			/// write 
+		trans = new();
+	   		 @(posedge interf.clk_i);
+////////////////////////////////////////// write////////////////////////////////////////
+			if(`monitor.we_i && `monitor.stb_i && `monitor.cyc_i)begin			
 				@(posedge `monitor.clk_i);
 				wait(interf.ack_o);
 			    if (interf.stall_o)
 				repeat(2) @(posedge `monitor.clk_i);
-				trans.data_in      <= `monitor.dat_i;        
-				trans.select_bank <= `monitor.sel_i;
-				trans.address     <= `monitor.adr_i;
-				trans.write_enable<= `monitor.we_i;
+				trans.data_in     = `monitor.dat_i;        
+				trans.select_bank = `monitor.sel_i;
+				trans.address     = `monitor.adr_i;
+				trans.write_enable= `monitor.we_i;
+				$display("Monitor received Write: Address=%0d, select bank=%0d, data_in= %0d\n",trans.address,trans.select_bank,trans.data_in);
 				end
-			else if( !interf.we_i && interf.stb_i && interf.cyc_i)begin // read
+////////////////////////////////////////// Read////////////////////////////////////////
+			else if( !`monitor.we_i && `monitor.stb_i && `monitor.cyc_i ) begin                
 				@(posedge `monitor.clk_i);
-				wait(interf.ack_o);
-				if (interf.stall_o)
+				wait(`monitor.ack_o);
+				if (`monitor.stall_o)
 				repeat(2) @(posedge `monitor.clk_i);
-				trans.data_out     <= `monitor.dat_o;     
-				trans.select_bank <= `monitor.sel_i;
-				trans.address     <= `monitor.adr_i;
-				trans.write_enable<= `monitor.we_i;
+				trans.data_out    = `monitor.dat_o;     
+				trans.select_bank = `monitor.sel_i;
+				trans.address     = `monitor.adr_i;
+				trans.write_enable= `monitor.we_i;
+				$display("Monitor Received Read: Address=%0d, select bank=%0d, data_out=%0d\n",trans.address,trans.select_bank,trans.data_out);
 				end
-                                @(posedge `monitor.clk_i);
 		mon2scb.put(trans);
-		$display("[ Monitor Read ]");
 		end
 	endtask
 endclass
-
-
-
-
-
-
-
-
 
