@@ -23,7 +23,11 @@ module top;
 	wire	cyc_i;
 
 	always #5 clk_i = ~clk_i;
-
+	initial 
+		begin
+			rst_i = 1;
+		#5 	rst_i=0;
+		end
 	wb_interface intf(rst_i,clk_i);
 
 	wb_test test(intf);
