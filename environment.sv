@@ -23,7 +23,7 @@ class environment;
 		this.mon2scb = new();
 		
 		this.gen = new(gen2drv,gen2scb);
-		this.drv = new(gen2drv,intf);
+		this.drv = new(intf,gen2drv);
 		this.mon = new(mon2scb,intf);
 		this.scb = new(/*gen2scb,*/mon2scb);
 	
@@ -125,7 +125,7 @@ This task is for single cycle pipeline read & write operation
 	//call the below mentioned function 8 times for writing & then 
 	//reading 
 	
-		for (int i = 0 ; i <  ; i++)
+		for (int i = 0 ; i < 8 ; i++)
 		drv.sc_pl_rw();
 	
 	endtask
