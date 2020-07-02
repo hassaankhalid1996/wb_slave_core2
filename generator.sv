@@ -9,11 +9,10 @@ class generator;
 		this.gen2drv = gen2drv;
 		this.gen2scb = gen2scb; 
 	endfunction
-	
-	task write_specific_addr_rand_data(bit [15:0] address);
 
-/* Description :
-This task is designed to write data at the gien specific address 
+	task write_specific_addr_rand_data(bit [15:0] address);
+	/* Description :
+This task is designed to write data at the given specific address 
 The data written would be random
 You can call read_specific_addr to read the data
 */	
@@ -23,8 +22,11 @@ You can call read_specific_addr to read the data
 		gen2drv.put(tr);
 		gen2scb.put(tr);
 	
-	endtask
-	
+	endtask	
+
+
+
+
 	task write_specific_addr(bit [15:0] address);
 	
 /* Description :
@@ -61,7 +63,7 @@ In this case the data written would also be equal to address provided.
 	for (int i = 0 ; i < 16 ; i++)
 	begin 
 		transaction tr; 
-		tr = new (i, i , 0, 4'b1111, 1'b1);
+		tr = new (i, i , 0, 4'b0100, 1'b1);
 		gen2drv.put(tr);
 		gen2scb.put(tr);
 	end 	
@@ -76,7 +78,7 @@ The block size would be 16.
 	for (int i = 0 ; i < 16 ; i++)
 	begin 
 		transaction tr; 
-		tr = new (i, 0 , 0, 4'b1111, 1'b0);
+		tr = new (i, 0 , 0, 4'b0100, 1'b0);
 		gen2drv.put(tr);
 		gen2scb.put(tr);
 	end 	
@@ -92,7 +94,7 @@ In this case the data written would also be equal to address provided.
 	for (int i = 0 ; i < value_less_than_16 ; i++)
 	begin 
 		transaction tr; 
-		tr = new (i, i , 0, 4'b1111, 1'b1);
+		tr = new (i, i , 0, 4'b1000, 1'b1);
 		gen2drv.put(tr);
 		gen2scb.put(tr);
 	end 	
@@ -107,7 +109,7 @@ The block size would be controlled by environment.
 	for (int i = 0 ; i < value_less_than_16 ; i++)
 	begin 
 		transaction tr; 
-		tr = new (i, 0 , 0, 4'b1111, 1'b0);
+		tr = new (i, 0 , 0, 4'b1000, 1'b0);
 		gen2drv.put(tr);
 		gen2scb.put(tr);
 	end 	
