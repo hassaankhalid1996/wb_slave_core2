@@ -1,4 +1,5 @@
 
+
 interface wb_interface(
 	input logic rst_i,
 	input logic clk_i
@@ -67,5 +68,17 @@ interface wb_interface(
     input  stall_o,
     input  cyc_i
 	);
+	
+	
+	covergroup cg
+		@(posedge intf.clk_i);
+	
+		coverpoint intf.stb_i {bins one_s = {1}; bins zeros_s = {0};}
+		coverpoint intf.cyc_i {bins one_c = {1}; bins zeros_c = {0};}
+		coverpoint intf.we_i {bins one_w = {1}; bins zeros_w = {0};}
 		
+	endgroup
+	cg cover_group = new() ;
+	
+	
 endinterface: wb_interface
