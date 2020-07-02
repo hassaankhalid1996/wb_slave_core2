@@ -25,8 +25,9 @@ module top;
 	always #5 clk_i = ~clk_i;
 	initial 
 		begin
-			rst_i = 1;
-		#5 	rst_i=0;
+			rst_i = 0;
+		#5	rst_i=1;
+		#10	rst_i=0;
 		end
 	wb_interface intf(rst_i,clk_i);
 
