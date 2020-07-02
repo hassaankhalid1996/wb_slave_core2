@@ -1,6 +1,16 @@
 
+
 vcs -sverilog wb_core2.sv top.sv +define+check1 -assert enable_diag \+define+ASSERT_ON -y -full64 -debug_all -cm line+tgl+fsm+cond+branch+assert
 
 ./simv -gui -cm line+tgl+fsm+cond+branch+assert
 
 dve -covdir simv.vdb -full64
+
+------------------------------------------------------------------FOR COVERAGE REPORT------------------------------------------------------------------------------- 
+
+vcs -sverilog top.sv -assert enable_diag \+define+ASSERT_ON +define+check1+check2+check3+check4+check5+check6+check7+check8+check9+check10  -full64 -debug_all -cm assert
+
+./simv -assert success -assert verbose -assert report -cm assert
+
+
+urg -dir simv.vdb
