@@ -46,7 +46,7 @@ In this case the data written would also be equal to address provided.
 	for (int i = 0 ; i < 16 ; i++)
 	begin 
 		transaction tr; 
-		tr = new (i, i , 0, 4'b1111, 1'b1);
+		tr = new (i, i , 0, 4'b0100, 1'b1);
 		gen2drv.put(tr);
 		gen2scb.put(tr);
 	end 	
@@ -61,7 +61,7 @@ The block size would be 16.
 	for (int i = 0 ; i < 16 ; i++)
 	begin 
 		transaction tr; 
-		tr = new (i, 0 , 0, 4'b1111, 1'b0);
+		tr = new (i, 0 , 0, 4'b0100, 1'b0);
 		gen2drv.put(tr);
 		gen2scb.put(tr);
 	end 	
@@ -77,7 +77,7 @@ In this case the data written would also be equal to address provided.
 	for (int i = 0 ; i < value_less_than_16 ; i++)
 	begin 
 		transaction tr; 
-		tr = new (i, i , 0, 4'b1111, 1'b1);
+		tr = new (i, i , 0, 4'b1000, 1'b1);
 		gen2drv.put(tr);
 		gen2scb.put(tr);
 	end 	
@@ -92,7 +92,7 @@ The block size would be controlled by environment.
 	for (int i = 0 ; i < value_less_than_16 ; i++)
 	begin 
 		transaction tr; 
-		tr = new (i, 0 , 0, 4'b1111, 1'b0);
+		tr = new (i, 0 , 0, 4'b1000, 1'b0);
 		gen2drv.put(tr);
 		gen2scb.put(tr);
 	end 	
