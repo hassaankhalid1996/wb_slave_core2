@@ -67,39 +67,30 @@ interface wb_interface(
     input  stall_o,
     input  cyc_i
 	);
-///////////////////////////////////Courage Groups///////////////////////////////////////////////////
-	covergroup read_write_enable @(posedge intf.clk_i);
-	    coverpoint intf.we_i {bins write ={1};bins read ={0};}
-	    endgroup
-	read_write_enable cover_group = new() ;
-///////////////////////////////////////////////////////////////////////////////////////////////// 
-	covergroup Slave_strobe @(posedge intf.clk_i);   
-	    coverpoint  intf.stb_i  {bins slave_not_ready  = {0};  bins Slave_ready = {1};}
-	    coverpoint  intf.cyc_i  {bins cycle_stop       = {0};  bins cycle_start = {1};}
-	    cross intf.stb_i, intf.cyc_i;   
-	endgroup
-	Slave_strobe cover_group = new() ;
-//////////////////////////////////////////////////////////////////////////////////////////////
-	covergroup dataselect @(posedge intf.clk_i); 
+///////////////////////////////////Courage Group///////////////////////////////////////////////////
+
+	covergroup cb @(posedge intf.clk_i);
+	  
+		coverpoint intf.we_i {bins write ={1};bins read ={0};}
+	    
+		coverpoint  intf.stb_i  {bins slave_not_ready  = {0};  bins Slave_ready = {1};}
+
+		coverpoint  intf.cyc_i  {bins cycle_stop       = {0};  bins cycle_start = {1};}   
+		
 		coverpoint intf.sel_i {
 		    bins byte_transfer= {0};
 		    bins halfword_transfer= {1};
 		    bins word_transfer= {2};
 		    bins more_than_word_transfer = {[3:$]};}
-	endgroup
-	dataselect cover_group = new() ;
-//////////////////////////////////////////////////////////////////////////////////////////////////
-	covergroup Acknowledge @(posedge intf.clk_i);
+		    
 		coverpoint intf.ack_o {bins no_transfer = {0}; bins _transfer = {1};}
-	endgroup
-	Acknowledge cover_group = new() ;
-////////////////////////////////////////////////////////////////////////////////////////////////////	
-	covergroup Address_data @(posedge intf.clk_i);
-	    coverpoint intf.adr_i { bins address_0_15[] = {[0:15]};bins address_rest = {[15:$]};} 
-	    coverpoint intf.dat_o { bins data [4] = {[0:$]};}
-	    cross intf.adr_i, intf.dat_o;
-	endgroup
-	Address_data cover_group = new() ;
-//////////////////////////////////////////////////////////////////////////////////////////////////////
 
+		coverpoint intf.adr_i { bins address_0_15[] = {[0:15]};bins address_rest = {[15:$]};} 
+
+		coverpoint intf.dat_i { bins data [4] = {[0:$]};}
+
+	    endgroup
+	cb cover_group = new() ;
+
+/////////////////////////////////////////////// end group /////////////////////////////////////////////
 endinterface: wb_interface
