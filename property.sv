@@ -40,7 +40,7 @@ module wb_property (
 `ifdef check2
 	property ack_o_response_to_stb_i_signal;
    		@(posedge clk_i) disable iff(rst_i || err_o)
-			$rose(stb_i)|=> $rose(ack_o==1);
+			$rose(stb_i)|=> (ack_o==1);
 	endproperty
        
 	assert property ( ack_o_response_to_stb_i_signal) 
@@ -54,7 +54,7 @@ module wb_property (
 `ifdef check3
 	property reset_signal_check;
    		@(posedge clk_i)
-			$rose(rst_i) |-> Ack_o==0 && err_o==0 && stall_o==0;
+			$rose(rst_i) |-> ack_o==0 && err_o==0 && stall_o==0;
 	endproperty
         
 	assert property ( reset_signal_check) 
@@ -70,7 +70,8 @@ module wb_property (
 `ifdef check4
 	property stb_i_signal_validity;
    		@(posedge clk_i)			
-			(cyc_i==1) |->  ^(stb_i)==='bx && ^(stb_i)==='bz;
+		  (cyc_i==1) |=>  !($isunknown(stb_i));
+   
 	endproperty
         
 	assert property ( stb_i_signal_validity) 
@@ -86,7 +87,8 @@ module wb_property (
 `ifdef check5
 	property stall_o_signal_validity;
    		@(posedge clk_i)			
-			(cyc_i==1) |->  ^(stall_o)==='bx && ^(stall_o)==='bz;
+		  (cyc_i==1) |=>  !($isunknown(stall_o));
+   
 	endproperty
         
 	assert property ( stall_o_signal_validity) 
@@ -102,7 +104,7 @@ module wb_property (
 `ifdef check6
 	property ack_o_signal_validity;
    		@(posedge clk_i)			
-			(cyc_i==1) |->  ^(ack_o)==='bx && ^(ack_o)==='bz;
+				    (cyc_i==1) |=> !($isunknown(ack_o));
 	endproperty
         
 	assert property ( ack_o_signal_validity) 
@@ -118,7 +120,7 @@ module wb_property (
 `ifdef check7
 	property err_o_signal_validity;
    		@(posedge clk_i)			
-			(cyc_i==1) |->  ^(err_o)==='bx && ^(err_o)==='bz;
+				     (cyc_i==1) |=>  !($isunknown(err_o));
 	endproperty
         
 	assert property ( err_o_signal_validity) 
@@ -134,7 +136,7 @@ module wb_property (
 `ifdef check8
 	property we_i_signal_validity;
    		@(posedge clk_i)			
-			(cyc_i==1) |->  ^(we_i)==='bx && ^(we_i)==='bz;
+					  (cyc_i==1) |=> !($isunknown(we_i));
 	endproperty
         
 	assert property ( we_i_signal_validity) 
@@ -150,7 +152,7 @@ module wb_property (
 `ifdef check9
 	property adr_i_signal_validity;
    		@(posedge clk_i)		
-			(cyc_i==1) |->  ^(adr_i)==='bx && ^(adr_i)==='bz;
+					  (cyc_i==1) |=>  !($isunknown(adr_i));
 	endproperty
         
 	assert property ( adr_i_signal_validity) 
@@ -166,7 +168,7 @@ module wb_property (
 `ifdef check10
 	property dat_i_signal_validity;
    		@(posedge clk_i)		
-			(cyc_i==1) |->  ^(dat_i)==='bx && ^(dat_i)==='bz;
+			       (cyc_i==1) |=>  !($isunknown(dat_i));
 	endproperty
         
 	assert property ( dat_i_signal_validity) 
